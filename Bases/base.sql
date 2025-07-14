@@ -100,4 +100,7 @@ INSERT INTO S2_PROJET_FINAL_objets (nom_objet, id_categorie, id_membre) VALUES
 ('Rouge a levres mat', 1, 4),
 ('Pinceau large', 1, 4);
 
-SELECT * FROM S2_PROJET_FINAL_membres;
+SELECT * 
+FROM v_connexion_membre
+WHERE email ='%s'
+AND mdp ='%s';
