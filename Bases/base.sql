@@ -133,5 +133,8 @@ ON E.id_objet = O.id_objet;
 
 SELECT * FROM S2_PROJET_FINAL_objets;
 
+ALTER TABLE S2_PROJET_FINAL_emprunts
+ADD COLUMN etat VARCHAR(100) NOT NULL;
+
 
 

@@ -2,10 +2,10 @@
 session_start();
 require("../Inclus/fonctions.php");
 
-if (!isset($_SESSION['id_membre']) || !isset($_GET['id_membre'])) {
+/*if (!isset($_SESSION['id_membre']) || !isset($_GET['id_membre'])) {
     header("Location: login.php");
     exit();
-}
+}*/
 
 $id_membre = (int)$_GET['id_membre'];
 $bdd = connecterBase();
@@ -42,6 +42,7 @@ foreach ($objects as $obj) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil Membre - Prêt d'Objets</title>
     <link href="../Styles/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../Styles/membre.css" rel="stylesheet">
 </head>
 <body>
     <header class="bg-light py-3">
@@ -82,9 +83,30 @@ foreach ($objects as $obj) {
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
+        <?php
+            $emprunt_liste= get_liste_emprunt_par_membre();
+        ?>
+        <h1>Emprunts</h1>
+        <table >
+            <tr>
+                <th>nom</th>
+                <th> nom_objets</th>
+                <th>date_emprunt</th>
+                <th>retourner</th>
+
+             </tr>
+             <?php foreach($emprunt_liste as $emprunt) {?>
+                <tr class="border">
+                    <td><?= $emprunt['nom']?></td>
+                    <td><?= $emprunt['nom_objet']?></td>
+                    <td><?= $emprunt['date_emprunt']?></td>
+                    <td><a href=""><button class="btn btn-secondary""> abimer </button></a>  <a href=""> <button class="btn btn-secondary">non abimer</button></a>
+                </tr>
+            <?php } ?>
+        </table>
     </main>
 
-    <footer class="bg-light text-center py-3">
+    <footer class="bg-light 'text-center py-3">
         <p>© 004022-004140. Tous droits réservés.</p>
     </footer>
 

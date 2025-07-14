@@ -165,4 +165,24 @@ function emprunterObjet($id_objet, $id_membre, $duree) {
     mysqli_stmt_close($stmt);
     return $result;
 }
+ function get_liste_emprunt_par_membre(){
+    $bdd = connecterBase();
+        $sql = "SELECT O.id_objet, O.id_categorie, O.id_membre, E.id_emprunt,M.nom, 
+        O.nom_objet, E.date_emprunt
+        FROM S2_PROJET_FINAL_objets O
+        JOIN S2_PROJET_FINAL_membres M
+        ON M.id_membre = O.id_membre
+        JOIN S2_PROJET_FINAL_emprunts E
+        ON E.id_objet = O.id_objet;
+        ";
+        
+        $req = mysqli_query($bdd,$sql );
+        $result = array();
+        while ($news = mysqli_fetch_assoc($req)) {
+            $result[] = $news;
+        }
+        mysqli_free_result($req);
+        return $result;
+
+ }
 ?>
