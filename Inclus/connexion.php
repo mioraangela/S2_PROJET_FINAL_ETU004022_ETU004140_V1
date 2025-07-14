@@ -5,14 +5,12 @@
         static $connect = null;
 
         if ($connect === null) {
-            $connect = mysqli_connect('localhost', 'root', 'Wpbibsz28041.', 'immobilier');
+            $connect = mysqli_connect('localhost', 'ETU004140', 'P9gc6PHo', 'db_s2_ETU004140');
 
             if (!$connect) {
-                // Arrête le script et affiche une erreur si la connexion échoue
                 die('Erreur de connexion à la base de données : ' . mysqli_connect_error());
             }
 
-            // Optionnel : définir l'encodage des caractères pour gérer les accents (UTF-8 recommandé)
             mysqli_set_charset($connect, 'utf8mb4');
         }
 
@@ -24,14 +22,12 @@
         static $connect = null;
 
         if ($connect === null) {
-            $connect = mysqli_connect('localhost', 'root', '', 'employees');
+            $connect = mysqli_connect('localhost', 'root', '', 'S2_PROJET_FINAL');
 
             if (!$connect) {
-                // Arrête le script et affiche une erreur si la connexion échoue
                 die('Erreur de connexion à la base de données : ' . mysqli_connect_error());
             }
 
-            // Optionnel : définir l'encodage des caractères pour gérer les accents (UTF-8 recommandé)
             mysqli_set_charset($connect, 'utf8mb4');
         }
 

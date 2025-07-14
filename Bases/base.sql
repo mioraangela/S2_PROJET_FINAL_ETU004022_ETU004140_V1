@@ -99,3 +99,5 @@ INSERT INTO S2_PROJET_FINAL_objets (nom_objet, id_categorie, id_membre) VALUES
 ('Table en bois', 4, 4),
 ('Rouge a levres mat', 1, 4),
 ('Pinceau large', 1, 4);
+
+SELECT * FROM S2_PROJET_FINAL_membres;

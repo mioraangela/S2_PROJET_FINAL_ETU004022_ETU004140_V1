@@ -1,0 +1,1 @@
+CREATE OR REPLACE v_connexion_membre AS
