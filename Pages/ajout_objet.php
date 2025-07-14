@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un Objet - Prêt d'Objets</title>
     <link href="../Styles/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../Styles/ajout_objet.css" rel="stylesheet">
     <style>
         .form-container { max-width: 600px; margin: 50px auto; }
     </style>

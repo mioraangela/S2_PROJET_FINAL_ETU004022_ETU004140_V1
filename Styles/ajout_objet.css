@@ -4,19 +4,10 @@ body {
     font-family: 'Times New Roman', Times, serif;
 }
 
-.navbar {
-    background-color: #2E2E2E !important;
+header {
+    background-color: #2E2E2E;
     border-bottom: 2px solid #4A0000;
-}
-
-.navbar-brand, .nav-link {
-    color: #E8E8E8 !important;
-    font-size: 1.2rem;
-    transition: color 0.3s;
-}
-
-.nav-link:hover {
-    color: #4A0000 !important;
+    padding: 20px 0;
 }
 
 .container {
@@ -24,18 +15,20 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    margin-top: 30px;
-    margin-bottom: 30px;
 }
 
 h1 {
     color: #4A0000;
-    font-size: 2.5rem;
-    text-align: center;
+    font-size: 2rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.form-label, .form-check-label {
+.form-container {
+    max-width: 600px;
+    margin: 50px auto;
+}
+
+.form-label {
     color: #E8E8E8;
     font-size: 1.1rem;
 }
@@ -64,41 +57,16 @@ h1 {
     border-color: #5E0000;
 }
 
-.objet-card {
+.alert-success {
     background-color: #3C3C3C;
-    border: 2px solid #4A0000;
-    border-radius: 10px;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.objet-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(74, 0, 0, 0.5);
-}
-
-.card-img-top {
-    height: 200px;
-    object-fit: cover;
-    border-bottom: 2px solid #4A0000;
-}
-
-.card-title {
-    color: #E8E8E8;
-    font-size: 1.5rem;
-}
-
-.card-text {
-    color: #E8E8E8;
-}
-
-.status-emprunte {
-    color: #FF4040;
-    font-weight: bold;
-}
-
-.status-disponible {
     color: #00A300;
-    font-weight: bold;
+    border-color: #4A0000;
+}
+
+.alert-danger {
+    background-color: #3C3C3C;
+    color: #FF4040;
+    border-color: #4A0000;
 }
 
 footer {
