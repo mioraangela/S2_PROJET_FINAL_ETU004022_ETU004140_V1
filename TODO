@@ -1,0 +1,24 @@
+- V1 :
+    - 
+    - Creer une base de donnees :
+        -
+        - [4140][X] Membres;
+        - [4140][X] Categories objets;
+        - [4140][X] Objets;
+        - [4140][X] Images objets;
+        - [4140][X] Emprunts;
+
+    - Inserer les donnees de test :
+        -
+        - [4140][] 4 membres;
+        - [4140][] 4 categories;
+        - [4140][] 10 objets par membre a repartir sur les categories;
+        - [4140][] 10 emprunts;
+        
+    - Creer les pages :
+        -
+        - [4140][] Login;
+        - [4140][] Inscription;
+        - [4140][] Liste des objets (avec date de retour si emprunt en cours);
+        - [4140][] Filtre par categorie;
+
