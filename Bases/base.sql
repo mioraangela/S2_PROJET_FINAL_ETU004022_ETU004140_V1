@@ -40,3 +40,15 @@ CREATE TABLE S2_PROJET_FINAL_emprunts(
     FOREIGN KEY (id_membre) REFERENCES S2_PROJET_FINAL_membres(id_membre)
 );
 
+INSERT INTO S2_PROJET_FINAL_membres(nom, date_naissance, genre, email, ville, mdp, image_profil) VALUES
+('Alice', '2000-05-12', 'F', 'alice@gmail.com', 'Antananarivo', 'mdp123', 'Alice.jpg'),
+('Bob', '1998-09-23', 'M', 'bob@gmail.com', 'Toamasina', 'mdp123', 'Bob.jpg'),
+('Claire', '2001-01-18', 'F', 'claire@gmail.com', 'Fianarantsoa', 'mdp123', 'Claire.jpg'),
+('David', '1999-07-30', 'M', 'david@gmail.com', 'Mahajanga', 'mdp123', 'David.jpg');
+
+INSERT INTO S2_PROJET_FINAL_categories_objets (nom_categorie) VALUES
+('Esthetique'),
+('Bricolage'),
+('Mecanique'),
+('Cuisine');
+
