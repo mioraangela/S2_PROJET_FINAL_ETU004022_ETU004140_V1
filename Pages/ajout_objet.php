@@ -1,41 +1,30 @@
 <?php
-require("../Inclus/fonctions.php");
 session_start();
+require("../Inclus/fonctions.php");
 
 if (!isset($_SESSION['id_membre'])) {
     header("Location: login.php");
-    exit;
+    exit();
 }
 
-$categories = get_categories();
-$erreur = "";
-$success = "";
+$success = false;
+$error = '';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nom_objet = $_POST['nom_objet'] ?? '';
-    $id_categorie = $_POST['id_categorie'] ?? '';
-    $images = [];
-
-    if (empty($nom_objet) || empty($id_categorie)) {
-        $erreur = "Veuillez remplir tous les champs.";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nom_objet = trim($_POST['nom_objet']);
+    $id_categorie = (int)$_POST['id_categorie'];
+    
+    if (empty($nom_objet) || $id_categorie <= 0) {
+        $error = "Veuillez remplir tous les champs obligatoires.";
+    } elseif (empty($_FILES['images']['name'][0])) {
+        $error = "Veuillez uploader au moins une image.";
     } else {
-        if (!empty($_FILES['images']['name'][0])) {
-            $upload_dir = 'uploads/';
-            foreach ($_FILES['images']['name'] as $key => $name) {
-                if ($_FILES['images']['error'][$key] == UPLOAD_ERR_OK) {
-                    $tmp_name = $_FILES['images']['tmp_name'][$key];
-                    $new_name = uniqid() . '_' . basename($name);
-                    if (move_uploaded_file($tmp_name, $upload_dir . $new_name)) {
-                        $images[] = $new_name;
-                    }
-                }
-            }
-        }
-
-        if (ajouter_objet($nom_objet, $id_categorie, $_SESSION['id_membre'], $images)) {
-            $success = "Objet ajouté avec succès !";
+        $id_membre = $_SESSION['id_membre'];
+        $id_objet = ajouterObjet($nom_objet, $id_categorie, $id_membre, $_FILES['images']);
+        if ($id_objet) {
+            $success = true;
         } else {
-            $erreur = "Erreur lors de l'ajout de l'objet.";
+            $error = "Erreur lors de l'ajout de l'objet.";
         }
     }
 }
@@ -46,75 +35,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter un Objet</title>
+    <title>Ajouter un Objet - Prêt d'Objets</title>
     <link href="../Styles/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="../Styles/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .form-container { max-width: 600px; margin: 50px auto; }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Prêt d'Objets</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="home.php">Accueil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="membre.php?id_membre=<?php echo $_SESSION['id_membre']; ?>">Mon Profil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="ajout_objet.php">Ajouter un objet</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="logout.php">Déconnexion</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+    <header class="bg-light py-3">
+        <div class="container">
+            <h1 class="h3">Ajouter un Nouvel Objet</h1>
+            <a href="home.php" class="btn btn-primary">Retour à l'accueil</a>
+        </div>
     </header>
 
-    <main class="container my-5">
-        <h1 class="text-center mb-4">Ajouter un nouvel objet</h1>
-        <?php if ($erreur): ?>
-            <div class="alert alert-danger"><?php echo $erreur; ?></div>
-        <?php endif; ?>
+    <main class="container form-container">
         <?php if ($success): ?>
-            <div class="alert alert-success"><?php echo $success; ?></div>
+            <div class="alert alert-success">Objet ajouté avec succès ! <a href="home.php">Retour à la liste</a></div>
+        <?php elseif ($error): ?>
+            <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
+
         <form method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="nom_objet" class="form-label">Nom de l'objet</label>
-                <input type="text" name="nom_objet" id="nom_objet" class="form-control" required>
+                <input type="text" class="form-control" id="nom_objet" name="nom_objet" required>
             </div>
             <div class="mb-3">
                 <label for="id_categorie" class="form-label">Catégorie</label>
-                <select name="id_categorie" id="id_categorie" class="form-select" required>
+                <select class="form-select" id="id_categorie" name="id_categorie" required>
                     <option value="">Sélectionnez une catégorie</option>
-                    <?php foreach ($categories as $categorie): ?>
-                        <option value="<?php echo $categorie['id_categorie']; ?>">
-                            <?php echo htmlspecialchars($categorie['nom_categorie']); ?>
-                        </option>
-                    <?php endforeach; ?>
+                    <?php
+                    $categories = get_categories();
+                    foreach ($categories as $categorie) {
+                        echo "<option value='{$categorie['id_categorie']}'>" . htmlspecialchars($categorie['nom_categorie']) . "</option>";
+                    }
+                    ?>
                 </select>
             </div>
             <div class="mb-3">
-                <label for="images" class="form-label">Images</label>
-                <input type="file" name="images[]" id="images" class="form-control" multiple accept="image/*">
+                <label for="images" class="form-label">Images (la première sera l'image principale)</label>
+                <input type="file" class="form-control" id="images" name="images[]" accept="image/*" multiple required>
             </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Ajouter</button>
-            </div>
+            <button type="submit" class="btn btn-primary">Ajouter l'objet</button>
         </form>
     </main>
 
     <footer class="bg-light text-center py-3">
-        <p>&copy; 004022-004140. Tous droits réservés.</p>
+        <p>© 004022-004140. Tous droits réservés.</p>
     </footer>
 
+    <script src="../Styles/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

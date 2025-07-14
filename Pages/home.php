@@ -104,7 +104,7 @@ $objets = get_liste_objets($selected_categorie, $nom_objet, $disponible);
                 <?php foreach ($objets as $objet): ?>
                     <div class="col">
                         <div class="card objet-card h-100">
-                            <img src="<?php echo $objet['nom_image'] ? 'uploads/' . htmlspecialchars($objet['nom_image']) : '../images/default.jpg'; ?>" 
+                            <img src="<?php echo $objet['nom_image'] ? 'Uploads/' . htmlspecialchars($objet['nom_image']) : '../images/default.jpg'; ?>" 
                                  class="card-img-top" alt="<?php echo htmlspecialchars($objet['nom_objet']); ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo htmlspecialchars($objet['nom_objet']); ?></h5>
@@ -113,7 +113,7 @@ $objets = get_liste_objets($selected_categorie, $nom_objet, $disponible);
                                     Propriétaire: <?php echo htmlspecialchars($objet['nom_membre']); ?><br>
                                     Statut: 
                                     <?php if ($objet['emprunt_actif']): ?>
-                                        <span class="status-emprunte">Emprunté</span>
+                                        <span class="status-emprunte">Emprunté (retour prévu: <?php echo htmlspecialchars($objet['date_retour'] ?? 'N/A'); ?>)</span>
                                     <?php else: ?>
                                         <span class="status-disponible">Disponible</span>
                                     <?php endif; ?>
