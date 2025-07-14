@@ -53,5 +53,24 @@
 
         return $result;
     }
+
+    function get_liste_objets(){
+        $bdd = connecterBase();
+
+        $sql = "SELECT * FROM S2_PROJET_FINAL_objets;";
+
+        $sql = sprintf($sql, $email, $password);
+        echo $sql;
+        $req = mysqli_query($bdd,$sql);
+        $result = array();
+
+        while ($news = mysqli_fetch_assoc($req)) {
+            $result[] = $news;
+        }
+
+        mysqli_free_result($req);
+
+        return $result;
+    }
     
 ?>
