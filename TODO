@@ -21,3 +21,34 @@
         - [4022][X] Inscription;
         - [4022][] Liste des objets (avec date de retour si emprunt en cours);
         - [4022][] Filtre par categorie;
+
+- V2 :
+    -
+    - Ameliorer au maximum le design :
+        -
+        - [4022][] Connexion;
+        - [4022][] Inscription;
+        - [4022][] Accueil;
+
+    - Ajouter un nouvel objet par un membre (avec upload d'image) :
+        -
+        - [4140][] On peut avoir plusieurs images, mais la premiere image sera l'image principale a afficher sur la liste des objets;
+        - [4140][] On peut supprimer les images;
+        - [4140][] S'il n'y a pas d'image, mettre une image par defaut;
+
+    - Lorsqu'on clique sur un objet dans la liste, afficher la fiche de l'objet :
+        -
+        - [4140][] Image principale;
+        - [4140][] Autres images;
+        - [4140][] Histoire des emprunts;
+
+    - Mettre les criteres de recherche suivants sur la liste des objets :
+        -
+        - [4140][] Categorie;
+        - [4140][] Nom de l'objet;
+        - [4140][] Case a cocher disponible;
+
+    - Dans la fiche membre, mettre les infos du membre, ainsi que les objets du membre regroupes par categorie :
+        -
+        - [4140][] Infos du membre;
+        - [4140][] Objets du membre;
