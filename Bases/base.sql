@@ -130,3 +130,8 @@ JOIN S2_PROJET_FINAL_membres M
 ON M.id_membre = O.id_membre
 JOIN S2_PROJET_FINAL_emprunts E
 ON E.id_objet = O.id_objet;
+
+SELECT * FROM S2_PROJET_FINAL_objets;
+
+
+
