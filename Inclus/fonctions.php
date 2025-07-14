@@ -3,226 +3,112 @@ require("connexion.php");
 
 function connecterMembre($email, $password) {
     $bdd = connecterBase();
-
-    $sql = "SELECT * 
-            FROM v_connexion_membre
-            WHERE email = '%s'
-            AND mdp = '%s'";
-    
-    $sql = sprintf($sql, mysqli_real_escape_string($bdd, $email), mysqli_real_escape_string($bdd, $password));
-    $req = mysqli_query($bdd, $sql);
-    $result = array();
-
-    while ($news = mysqli_fetch_assoc($req)) {
-        $result[] = $news;
-    }
-
-    mysqli_free_result($req);
-    return $result;
+    $sql = "SELECT * FROM v_connexion_membre WHERE email = ? AND mdp = ?";
+    $stmt = mysqli_prepare($bdd, $sql);
+    mysqli_stmt_bind_param($stmt, "ss", $email, $password);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    mysqli_stmt_close($stmt);
+    return $data;
 }
 
 function setNewMembre($nom, $date_naissance, $genre, $email, $ville, $mdp, $photo) {
     $bdd = connecterBase();
-
-    $sql = "INSERT INTO S2_PROJET_FINAL_membres(nom, date_naissance, genre, email, ville, mdp, image_profil) 
-            VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s')";
-
-    $sql = sprintf($sql, 
-        mysqli_real_escape_string($bdd, $nom),
-        mysqli_real_escape_string($bdd, $date_naissance),
-        mysqli_real_escape_string($bdd, $genre),
-        mysqli_real_escape_string($bdd, $email),
-        mysqli_real_escape_string($bdd, $ville),
-        mysqli_real_escape_string($bdd, $mdp),
-        mysqli_real_escape_string($bdd, $photo)
-    );
-    $req = mysqli_query($bdd, $sql);
-    return $req;
+    $sql = "INSERT INTO S2_PROJET_FINAL_membres(nom, date_naissance, genre, email, ville, mdp, image_profil) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = mysqli_prepare($bdd, $sql);
+    mysqli_stmt_bind_param($stmt, "sssssss", $nom, $date_naissance, $genre, $email, $ville, $mdp, $photo);
+    $result = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    return $result;
 }
 
 function get_liste_emprunt() {
     $bdd = connecterBase();
-
     $sql = "SELECT * FROM v_emprunt";
     $req = mysqli_query($bdd, $sql);
-    $result = array();
-
-    while ($news = mysqli_fetch_assoc($req)) {
-        $result[] = $news;
-    }
-
-    mysqli_free_result($req);
-    return $result;
-}
-
-function get_liste_objets($categorie = null, $nom_objet = null, $disponible = false) {
-    $bdd = connecterBase();
-
-    $sql = "SELECT o.id_objet, o.nom_objet, c.nom_categorie, m.nom AS nom_membre, 
-                   i.nom_image, e.date_retour
-            FROM S2_PROJET_FINAL_objets o
-            LEFT JOIN S2_PROJET_FINAL_categories_objets c ON o.id_categorie = c.id_categorie
-            LEFT JOIN S2_PROJET_FINAL_membres m ON o.id_membre = m.id_membre
-            LEFT JOIN S2_PROJET_FINAL_objets_images i ON o.id_objet = i.id_objet 
-                AND i.id_image = (SELECT MIN(id_image) FROM S2_PROJET_FINAL_objets_images WHERE id_objet = o.id_objet)
-            LEFT JOIN S2_PROJET_FINAL_emprunts e ON o.id_objet = e.id_objet AND e.date_retour IS NULL
-            WHERE 1=1";
-    
-    if ($categorie) {
-        $sql .= " AND o.id_categorie = " . (int)$categorie;
-    }
-    if ($nom_objet) {
-        $sql .= " AND o.nom_objet LIKE '%" . mysqli_real_escape_string($bdd, $nom_objet) . "%'";
-    }
-    if ($disponible) {
-        $sql .= " AND e.id_emprunt IS NULL";
-    }
-
-    $req = mysqli_query($bdd, $sql);
-    $result = array();
-
-    while ($news = mysqli_fetch_assoc($req)) {
-        $result[] = $news;
-    }
-
+    $result = mysqli_fetch_all($req, MYSQLI_ASSOC);
     mysqli_free_result($req);
     return $result;
 }
 
 function get_categories() {
     $bdd = connecterBase();
-
     $sql = "SELECT * FROM S2_PROJET_FINAL_categories_objets";
     $req = mysqli_query($bdd, $sql);
-    $result = array();
-
-    while ($news = mysqli_fetch_assoc($req)) {
-        $result[] = $news;
-    }
-
+    $result = mysqli_fetch_all($req, MYSQLI_ASSOC);
     mysqli_free_result($req);
     return $result;
 }
 
-function get_objet($id_objet) {
+function get_liste_objets($categorie = null, $nom = null, $disponible = false) {
     $bdd = connecterBase();
-
-    $sql = "SELECT o.id_objet, o.nom_objet, c.nom_categorie, m.nom AS nom_membre
+    $sql = "SELECT o.id_objet, o.nom_objet, o.id_categorie, o.id_membre, c.nom_categorie, m.nom as nom_membre,
+            (SELECT nom_image FROM S2_PROJET_FINAL_objets_images i WHERE i.id_objet = o.id_objet ORDER BY i.id_image LIMIT 1) as nom_image,
+            (SELECT e.date_retour FROM S2_PROJET_FINAL_emprunts e WHERE e.id_objet = o.id_objet AND e.date_retour IS NULL LIMIT 1) as emprunt_actif
             FROM S2_PROJET_FINAL_objets o
             JOIN S2_PROJET_FINAL_categories_objets c ON o.id_categorie = c.id_categorie
             JOIN S2_PROJET_FINAL_membres m ON o.id_membre = m.id_membre
-            WHERE o.id_objet = %d";
+            WHERE 1=1";
     
-    $sql = sprintf($sql, (int)$id_objet);
-    $req = mysqli_query($bdd, $sql);
-    $result = mysqli_fetch_assoc($req);
-    mysqli_free_result($req);
-    return $result;
-}
-
-function get_images_objet($id_objet) {
-    $bdd = connecterBase();
-
-    $sql = "SELECT nom_image FROM S2_PROJET_FINAL_objets_images WHERE id_objet = %d";
-    $sql = sprintf($sql, (int)$id_objet);
-    $req = mysqli_query($bdd, $sql);
-    $result = array();
-
-    while ($news = mysqli_fetch_assoc($req)) {
-        $result[] = $news['nom_image'];
+    $params = [];
+    $types = "";
+    if ($categorie) {
+        $sql .= " AND o.id_categorie = ?";
+        $params[] = $categorie;
+        $types .= "i";
+    }
+    if ($nom) {
+        $sql .= " AND o.nom_objet LIKE ?";
+        $params[] = "%$nom%";
+        $types .= "s";
+    }
+    if ($disponible) {
+        $sql .= " AND NOT EXISTS (SELECT 1 FROM S2_PROJET_FINAL_emprunts e WHERE e.id_objet = o.id_objet AND e.date_retour IS NULL)";
     }
 
-    mysqli_free_result($req);
-    return $result;
-}
-
-function get_historique_emprunts($id_objet) {
-    $bdd = connecterBase();
-
-    $sql = "SELECT e.date_emprunt, e.date_retour, m.nom
-            FROM S2_PROJET_FINAL_emprunts e
-            JOIN S2_PROJET_FINAL_membres m ON e.id_membre = m.id_membre
-            WHERE e.id_objet = %d";
-    
-    $sql = sprintf($sql, (int)$id_objet);
-    $req = mysqli_query($bdd, $sql);
-    $result = array();
-
-    while ($news = mysqli_fetch_assoc($req)) {
-        $result[] = $news;
+    $stmt = mysqli_prepare($bdd, $sql);
+    if ($params) {
+        mysqli_stmt_bind_param($stmt, $types, ...$params);
     }
-
-    mysqli_free_result($req);
-    return $result;
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    mysqli_stmt_close($stmt);
+    return $data;
 }
 
-function get_membre($id_membre) {
+function ajouterObjet($nom_objet, $id_categorie, $id_membre, $images) {
     $bdd = connecterBase();
-
-    $sql = "SELECT nom, date_naissance, genre, email, ville, image_profil
-            FROM S2_PROJET_FINAL_membres
-            WHERE id_membre = %d";
     
-    $sql = sprintf($sql, (int)$id_membre);
-    $req = mysqli_query($bdd, $sql);
-    $result = mysqli_fetch_assoc($req);
-    mysqli_free_result($req);
-    return $result;
-}
-
-function get_objets_membre($id_membre) {
-    $bdd = connecterBase();
-
-    $sql = "SELECT o.id_objet, o.nom_objet, c.nom_categorie, c.id_categorie
-            FROM S2_PROJET_FINAL_objets o
-            JOIN S2_PROJET_FINAL_categories_objets c ON o.id_categorie = c.id_categorie
-            WHERE o.id_membre = %d
-            ORDER BY c.nom_categorie";
-    
-    $sql = sprintf($sql, (int)$id_membre);
-    $req = mysqli_query($bdd, $sql);
-    $result = array();
-
-    while ($news = mysqli_fetch_assoc($req)) {
-        $result[] = $news;
-    }
-
-    mysqli_free_result($req);
-    return $result;
-}
-
-function ajouter_objet($nom_objet, $id_categorie, $id_membre, $images) {
-    $bdd = connecterBase();
-
-    $sql = "INSERT INTO S2_PROJET_FINAL_objets(nom_objet, id_categorie, id_membre) 
-            VALUES('%s', %d, %d)";
-    $sql = sprintf($sql, 
-        mysqli_real_escape_string($bdd, $nom_objet),
-        (int)$id_categorie,
-        (int)$id_membre
-    );
-    $req = mysqli_query($bdd, $sql);
+    $sql = "INSERT INTO S2_PROJET_FINAL_objets (nom_objet, id_categorie, id_membre) VALUES (?, ?, ?)";
+    $stmt = mysqli_prepare($bdd, $sql);
+    mysqli_stmt_bind_param($stmt, "sii", $nom_objet, $id_categorie, $id_membre);
+    mysqli_stmt_execute($stmt);
     $id_objet = mysqli_insert_id($bdd);
+    mysqli_stmt_close($stmt);
 
-    foreach ($images as $image) {
-        $sql_image = "INSERT INTO S2_PROJET_FINAL_objets_images(id_objet, nom_image) 
-                      VALUES(%d, '%s')";
-        $sql_image = sprintf($sql_image, 
-            $id_objet, 
-            mysqli_real_escape_string($bdd, $image)
-        );
-        mysqli_query($bdd, $sql_image);
+    $upload_dir = "uploads/";
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0777, true);
     }
 
-    return $req;
-}
+    foreach ($images['name'] as $index => $name) {
+        if ($images['error'][$index] == UPLOAD_ERR_OK) {
+            $tmp_name = $images['tmp_name'][$index];
+            $file_name = uniqid() . "_" . basename($name);
+            $file_path = $upload_dir . $file_name;
 
-function supprimer_image($id_image) {
-    $bdd = connecterBase();
+            if (move_uploaded_file($tmp_name, $file_path)) {
+                $sql = "INSERT INTO S2_PROJET_FINAL_objets_images (id_objet, nom_image) VALUES (?, ?)";
+                $stmt = mysqli_prepare($bdd, $sql);
+                mysqli_stmt_bind_param($stmt, "is", $id_objet, $file_name);
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+            }
+        }
+    }
 
-    $sql = "DELETE FROM S2_PROJET_FINAL_objets_images WHERE id_image = %d";
-    $sql = sprintf($sql, (int)$id_image);
-    $req = mysqli_query($bdd, $sql);
-    return $req;
+    return $id_objet;
 }
 ?>

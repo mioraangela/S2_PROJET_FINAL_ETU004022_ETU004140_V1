@@ -4,23 +4,28 @@ session_start();
 
 $categories = get_categories();
 $selected_categorie = isset($_GET['categorie']) ? (int)$_GET['categorie'] : null;
-$nom_objet = isset($_GET['nom_objet']) ? $_GET['nom_objet'] : null;
-$disponible = isset($_GET['disponible']) ? true : false;
+$nom_objet = isset($_GET['nom_objet']) ? trim($_GET['nom_objet']) : null;
+$disponible = isset($_GET['disponible']) && $_GET['disponible'] == '1';
 $objets = get_liste_objets($selected_categorie, $nom_objet, $disponible);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>
-        Accueil - Prêt d'Objets
-    </title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - Prêt d'Objets</title>
     <link href="../Styles/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../Styles/home.css" rel="stylesheet">
     <script src="../Styles/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .objet-card { transition: transform 0.2s; }
+        .objet-card:hover { transform: scale(1.05); }
+        .status-emprunte { color: red; }
+        .status-disponible { color: green; }
+        .card-img-top { height: 200px; object-fit: cover; }
+    </style>
 </head>
-
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -80,7 +85,7 @@ $objets = get_liste_objets($selected_categorie, $nom_objet, $disponible);
                 </div>
                 <div class="col-md-4 d-flex align-items-end">
                     <div class="form-check">
-                        <input type="checkbox" name="disponible" id="disponible" class="form-check-input" <?php echo $disponible ? 'checked' : ''; ?>>
+                        <input type="checkbox" name="disponible" id="disponible" class="form-check-input" value="1" <?php echo $disponible ? 'checked' : ''; ?>>
                         <label for="disponible" class="form-check-label">Disponible uniquement</label>
                     </div>
                 </div>
@@ -91,34 +96,42 @@ $objets = get_liste_objets($selected_categorie, $nom_objet, $disponible);
         </form>
 
         <div class="row row-cols-1 row-cols-md-3 g-4">
-            <?php foreach ($objets as $objet): ?>
-                <div class="col">
-                    <div class="card objet-card h-100">
-                        <img src="<?php echo $objet['nom_image'] ? 'Uploads/' . htmlspecialchars($objet['nom_image']) : 'images/default.jpg'; ?>" 
-                             class="card-img-top" alt="<?php echo htmlspecialchars($objet['nom_objet']); ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($objet['nom_objet']); ?></h5>
-                            <p class="card-text">
-                                Catégorie: <?php echo htmlspecialchars($objet['nom_categorie']); ?><br>
-                                Propriétaire: <?php echo htmlspecialchars($objet['nom_membre']); ?><br>
-                                Statut: 
-                                <?php if ($objet['date_retour']): ?>
-                                    <span class="status-emprunte">Emprunté (retour: <?php echo $objet['date_retour']; ?>)</span>
-                                <?php else: ?>
-                                    <span class="status-disponible">Disponible</span>
+            <?php if (empty($objets)): ?>
+                <div class="col-12">
+                    <p class="text-center">Aucun objet trouvé.</p>
+                </div>
+            <?php else: ?>
+                <?php foreach ($objets as $objet): ?>
+                    <div class="col">
+                        <div class="card objet-card h-100">
+                            <img src="<?php echo $objet['nom_image'] ? 'uploads/' . htmlspecialchars($objet['nom_image']) : '../images/default.jpg'; ?>" 
+                                 class="card-img-top" alt="<?php echo htmlspecialchars($objet['nom_objet']); ?>">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo htmlspecialchars($objet['nom_objet']); ?></h5>
+                                <p class="card-text">
+                                    Catégorie: <?php echo htmlspecialchars($objet['nom_categorie']); ?><br>
+                                    Propriétaire: <?php echo htmlspecialchars($objet['nom_membre']); ?><br>
+                                    Statut: 
+                                    <?php if ($objet['emprunt_actif']): ?>
+                                        <span class="status-emprunte">Emprunté</span>
+                                    <?php else: ?>
+                                        <span class="status-disponible">Disponible</span>
+                                    <?php endif; ?>
+                                </p>
+                                <a href="objet.php?id_objet=<?php echo $objet['id_objet']; ?>" class="btn btn-primary">Voir la fiche</a>
+                                <?php if (!$objet['emprunt_actif'] && isset($_SESSION['id_membre']) && $_SESSION['id_membre'] != $objet['id_membre']): ?>
+                                    <a href="emprunter.php?id_objet=<?php echo $objet['id_objet']; ?>" class="btn btn-success">Emprunter</a>
                                 <?php endif; ?>
-                            </p>
-                            <a href="objet.php?id_objet=<?php echo $objet['id_objet']; ?>" class="btn btn-primary">Voir la fiche</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </main>
 
     <footer class="bg-light text-center py-3">
-        <p>&copy; 004022-004140. Tous droits réservés.</p>
+        <p>© 004022-004140. Tous droits réservés.</p>
     </footer>
-
 </body>
 </html>

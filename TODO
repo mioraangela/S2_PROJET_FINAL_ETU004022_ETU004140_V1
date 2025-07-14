@@ -53,3 +53,13 @@
         -
         - [4140][] Infos du membre;
         - [4140][] Objets du membre;
+
+- V3 :
+    -
+    - Ajouter un bouton Emprunter sur la fiche de l'objet :
+        -
+        - [4022][] Si l'objet est disponible, on peut l'emprunter;
+        - [4022][] Si l'objet n'est pas disponible, on ne peut pas l'emprunter;
+        - [4022][] Lorsqu'on emprunte un objet, on doit choisir une duree d'emprunt;
+        - [4022][] On affiche la date de disponibilite de l'objet dans la liste des objets;
+
