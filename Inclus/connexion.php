@@ -1,6 +1,6 @@
 <?php
     
-    function connecterBase()
+    /*function connecterBase()
     {
         static $connect = null;
 
@@ -15,9 +15,9 @@
         }
 
         return $connect;
-    }
+    }*/
 
-    /*function connecterBase()
+    function connecterBase()
     {
         static $connect = null;
 
@@ -32,5 +32,5 @@
         }
 
         return $connect;
-    }*/
+    }
 ?>

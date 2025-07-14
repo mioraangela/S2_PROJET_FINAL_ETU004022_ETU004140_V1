@@ -8,4 +8,7 @@
     if($count > 0){
         header("location: ../Pages/home.php");
     }
+    else{
+        header("location: ../Pages/login.php");
+    }
 ?>
