@@ -26,9 +26,10 @@
     -
     - Ameliorer au maximum le design :
         -
-        - [4022][] Connexion;
-        - [4022][] Inscription;
+        - [4022][X] Connexion;
+        - [4022][X] Inscription;
         - [4022][] Accueil;
+        - 
 
     - Ajouter un nouvel objet par un membre (avec upload d'image) :
         -

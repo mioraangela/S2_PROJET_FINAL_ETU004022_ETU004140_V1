@@ -17,7 +17,7 @@ $objets = get_liste_objets($selected_categorie, $nom_objet, $disponible);
     </title>
 
     <link href="../Styles/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="home.css" rel="stylesheet">
+    <link href="../Styles/home.css" rel="stylesheet">
     <script src="../Styles/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 
