@@ -100,7 +100,26 @@ INSERT INTO S2_PROJET_FINAL_objets (nom_objet, id_categorie, id_membre) VALUES
 ('Rouge a levres mat', 1, 4),
 ('Pinceau large', 1, 4);
 
+INSERT INTO S2_PROJET_FINAL_emprunts (id_objet, id_membre, date_emprunt, date_retour) VALUES
+(22, 4, '2025-07-11', NULL),           
+(24, 1, '2025-07-12', '2025-07-14'),   
+(26, 2, '2025-07-12', NULL),           
+(28, 3, '2025-07-13', '2025-07-15'),  
+(30, 2, '2025-07-13', NULL),           
+(32, 1, '2025-07-14', NULL),          
+(34, 3, '2025-07-14', '2025-07-16'), 
+(36, 4, '2025-07-15', NULL), 
+(38, 2, '2025-07-15', NULL),       
+(40, 1, '2025-07-16', NULL);   
+
 SELECT * 
 FROM v_connexion_membre
 WHERE email ='%s'
 AND mdp ='%s';
+
+SELECT *
+FROM S2_PROJET_FINAL_objets;
+
+SELECT *
+FROM S2_PROJET_FINAL_emprunts;
+
