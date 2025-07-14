@@ -12,13 +12,13 @@
         -
         - [4140][X] 4 membres;
         - [4140][X] 4 categories;
-        - [4140][] 10 objets par membre a repartir sur les categories;
-        - [4140][] 10 emprunts;
+        - [4022][X] 10 objets par membre a repartir sur les categories;
+        - [4022][X] 10 emprunts;
         
     - Creer les pages :
         -
-        - [4140][] Login;
-        - [4140][] Inscription;
-        - [4140][] Liste des objets (avec date de retour si emprunt en cours);
-        - [4140][] Filtre par categorie;
+        - [4022][] Login;
+        - [4022][] Inscription;
+        - [4022][] Liste des objets (avec date de retour si emprunt en cours);
+        - [4022][] Filtre par categorie;
 

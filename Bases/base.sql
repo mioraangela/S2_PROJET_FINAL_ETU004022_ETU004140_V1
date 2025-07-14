@@ -52,3 +52,50 @@ INSERT INTO S2_PROJET_FINAL_categories_objets (nom_categorie) VALUES
 ('Mecanique'),
 ('Cuisine');
 
+INSERT INTO S2_PROJET_FINAL_objets (nom_objet, id_categorie, id_membre) VALUES
+('Rouge a levres', 1, 1),
+('Pinceau', 1, 1),
+('Tournevis', 2, 1),
+('Clé à molette', 2, 1),
+('Couteau de cuisine', 3, 1),
+('Poêle à frire', 3, 1),
+('Chaise en bois', 4, 1),
+('Table en verre', 4, 1),
+('Mascara', 1, 1),
+('Pince à épiler', 1, 1);
+
+INSERT INTO S2_PROJET_FINAL_objets (nom_objet, id_categorie, id_membre) VALUES
+('Crayon de bricolage', 2, 2),
+('Scie à bois', 2, 2),
+('Clé à cliquet', 2, 2),
+('Couteau de chef', 3, 2),
+('Mixeur', 3, 2),
+('Four à micro-ondes', 3, 2),
+('Chaise pliante', 4, 2),
+('Table basse', 4, 2),
+('Rouge a levres', 1, 2),
+('Pinceau', 1, 2);
+
+INSERT INTO S2_PROJET_FINAL_objets (nom_objet, id_categorie, id_membre) VALUES
+('Crayon de maquillage', 1, 3),
+('Pinceau à maquillage', 1, 3),
+('Tournevis cruciforme', 2, 3),
+('Clé Allen', 2, 3),
+('Couteau à pain', 3, 3),
+('Fouet', 3, 3),
+('Chaise de bureau', 4, 3),
+('Table', 4, 3),
+('Mascara waterproof', 1, 3),
+('Pince à cheveux', 1, 3);
+
+INSERT INTO S2_PROJET_FINAL_objets (nom_objet, id_categorie, id_membre) VALUES
+('Crayon de couleur', 1, 4),
+('Pinceau fin', 1, 4),
+('Tournevis plat', 2, 4),
+('Clé à molette réglable', 2, 4),
+('Couteau à éplucher', 3, 4),
+('Poêle antiadhésive', 3, 4),
+('Chaise en métal', 4, 4),
+('Table en bois', 4, 4),
+('Rouge a levres mat', 1, 4),
+('Pinceau large', 1, 4);
