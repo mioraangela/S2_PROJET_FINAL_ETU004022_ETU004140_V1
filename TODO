@@ -18,21 +18,6 @@
     - Creer les pages :
         -
         - [4022][4140][X] Connexion;
-        - [4140][] Inscription;
-        - [4140][] Liste des objets (avec date de retour si emprunt en cours);
-        - [4140][] Filtre par categorie;
-
-P9gc6PHo 
-
-/*function getIdDepartment($nomDepartment){
-    $bdd = dbconnect();
-    $sql = "SELECT dept_no
-        FROM departments
-        WHERE dept_name ='%s';
-    ";
-    $sql = sprintf($sql, $nomDepartment);
-    $req = mysqli_query($bdd,$sql);
-    $result = mysqli_fetch_assoc($req);
-    mysqli_free_result($req);
-    return $result; 
-}*/
+        - [4022][X] Inscription;
+        - [4022][] Liste des objets (avec date de retour si emprunt en cours);
+        - [4022][] Filtre par categorie;
