@@ -17,9 +17,9 @@
         
     - Creer les pages :
         -
-        - [4022][] Connexion;
-        - [4022][] Inscription;
-        - [4022][] Liste des objets (avec date de retour si emprunt en cours);
-        - [4022][] Filtre par categorie;
+        - [4022][X] Connexion;
+        - [4140][] Inscription;
+        - [4140][] Liste des objets (avec date de retour si emprunt en cours);
+        - [4140][] Filtre par categorie;
 
 P9gc6PHo
